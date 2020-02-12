@@ -1,25 +1,14 @@
 <?php
 require_once 'config/connect.php';
+if(isset($_POST['submit'])) {
+    $table = 'users';
+    $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $tab = ['first_name' => $_POST["first_name"], 'lastName' => $_POST['lastName'], 'city' => $_POST['city'], 'street' => $_POST['street'], 'house_number' => $_POST['house_number'], 'phone_number' => $_POST['phone_number'], 'login' => $_POST['login'], 'password' => $pass];
+    connexionBdd::get_Instance()->insert($table, $tab);
 
-$req = $dbh->prepare('INSERT INTO users(first_name,lastName,city,street,house_number,phone_number,login,password) VALUES(?, ?, ?, ?, ?, ?, ?, ?)');
 
 
-
-$req->bindParam(1,  $_POST['first_name']);
-$req->bindParam(2, $_POST['lastName']);
-$req->bindParam(3, $_POST['city']);
-$req->bindParam(4,  $_POST['street']);
-$req->bindParam(5,  $_POST['house_number']);
-$req->bindParam(6,$_POST['phone_number']);
-$req->bindParam(7,  $_POST['login']);
-$pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
-$req->bindParam(8, $pass);
-
-$req->execute();
-if ($req->execute()){
-    header('LOCATION:index.php');
 }
-
 ?>
 <!doctype html>
 <html lang="fr">

@@ -1,27 +1,33 @@
 <?php
 require_once 'config/connect.php';
-$sth = $dbh->prepare("SELECT *  FROM users");
-$sth->execute();
-    $count = $sth->rowCount();
+//on va chercher la selection des users
+connexionBdd::get_Instance()->query("SELECT *  FROM users");
+//pour compter le nombre d 'entrée dans le resultat du select
+    $count = connexionBdd::get_Instance()->rowCount();
 echo"<p class='text-center'>il y a $count users.</p>";
 
 
 
-if (isset($_POST['delete'])) {
-    $req = $dbh->prepare('DELETE FROM users WHERE id=?');
-    $req->bindParam(1,$_POST['user']);
 
-    try
-    {
-        $dbh -> beginTransaction ();
-        $req->execute();
-        $dbh -> commit ();
-        header('LOCATION:index.php');
-    }
-    catch ( Exception $e )
-    {
-        $dbh -> rollBack ();
-    }
+
+if (isset($_POST['delete'])) {
+    $table = 'users';
+    $id = $_POST['user'];
+var_dump($_POST);
+
+    connexionBdd::get_Instance()->delete($table, $id);
+    header('LOCATION:index.php');
+
+//    try
+//    {
+//        $dbh -> beginTransaction ();
+//        $req->execute();
+//        $dbh -> commit ();
+//    }
+//    catch ( Exception $e )
+//    {
+//        $dbh -> rollBack ();
+//    }
 
 }
 
@@ -63,18 +69,18 @@ if (isset($_POST['delete'])) {
         </thead>
         <tbody>
         <?php
-
-        while ($donnees = $sth->fetch()) {
+$result = connexionBdd::get_Instance()->getResults();
+        foreach ($result as $element) {
             echo '<tr role="row" class="odd">
-                            <td><a href="liste.php?id='.$donnees['id'].'">' . $donnees['first_name'] . '</a> </td>
-                            <td>' . $donnees['lastName'] . '</td>
-                            <td>' . $donnees['street'] . '</td>
-                            <td>' . $donnees['city'] . '</td>
-                            <td>' . $donnees['house_number'] . '</td>
-                            <td>' . $donnees['login'] . '</td>
-                            <td><a href="updateUsers.php?id='.$donnees['id'].'">update</a> </td>
+                            <td><a href="liste.php?id='.$element['id'].'">' . $element['first_name'] . '</a> </td>
+                            <td>' . $element['lastName'] . '</td>
+                            <td>' . $element['street'] . '</td>
+                            <td>' . $element['city'] . '</td>
+                            <td>' . $element['house_number'] . '</td>
+                            <td>' . $element['login'] . '</td>
+                            <td><a href="updateUsers.php?id='.$element['id'].'">update</a> </td>
                             <td><form method="post" >
-                            <input type="hidden" name="user" value='.$donnees['id'].'>
+                            <input type="hidden" name="user" value='.$element['id'].'>
                             <button type="submit" name="delete" >delete</button>
                             
                             </form></td>
