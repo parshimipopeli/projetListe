@@ -3,8 +3,9 @@ require_once 'config/connect.php';
 if (isset($_POST['submit'])) {
     $table = 'users';
     $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $tab = ['first_name' => $_POST["first_name"], 'lastName' => $_POST['lastName'], 'city' => $_POST['city'], 'street' => $_POST['street'], 'house_number' => $_POST['house_number'], 'phone_number' => $_POST['phone_number'], 'login' => $_POST['login'], 'password' => $pass];
+    $tab = ['first_name' => $_POST["first_name"], 'lastName' => $_POST['lastName'], 'city' => $_POST['city'], 'street' => $_POST['street'], 'house_number' => $_POST['house_number'], 'phone_number' => $_POST['phone_number'],'email' => $_POST['email'], 'login' => $_POST['login'], 'password' => $pass];
     connexionBdd::get_Instance()->insert($table, $tab);
+    header('LOCATION:index.php');
 }
 ?>
 <!doctype html>
@@ -48,7 +49,12 @@ if (isset($_POST['submit'])) {
         <div class="col-sm-10">
             <input type="number" name="phone_number" class="form-control" placeholder="Entrez le numero de tel">
         </div>
-    </div>
+
+        <div class="form-group">
+            <div class="col-sm-10">
+                <input type="email" name="email" class="form-control" placeholder="Entrez votre email">
+            </div>
+        </div>
     <div class="form-group">
         <div class="col-sm-10">
             <input type="text" name="login" class="form-control" placeholder="Entrez votre login">

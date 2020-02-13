@@ -34,6 +34,7 @@ if (isset($_POST['delete'])) {
             <th>ville</th>
             <th>rue</th>
             <th>no de maison</th>
+            <th>email</th>
             <th>login</th>
             <th>password</th>
         </tr>
@@ -48,6 +49,7 @@ if (isset($_POST['delete'])) {
                             <td>' . $element['street'] . '</td>
                             <td>' . $element['city'] . '</td>
                             <td>' . $element['house_number'] . '</td>
+                            <td>' .$element['email'] . '</td>
                             <td>' . $element['login'] . '</td>
                             <td><a href="updateUsers.php?id=' . $element['id'] . '">update</a> </td>
                             <td><form method="post" >

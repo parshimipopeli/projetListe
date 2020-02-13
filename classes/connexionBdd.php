@@ -74,11 +74,36 @@ class connexionBdd
     }
 
     //methode update
-    public function update($table, $id)
+    public function update($table, $tab, $where)
     {
-        $tabId = [':id' => $id];
-        $sql = "UPDATE FROM $table WHERE id = :id";
-        $this->query($sql, $tabId);
+        $stringWhere = '';
+        $stringSet = '';
+
+        $values = '';
+        $queryValue = [];
+        foreach ($tab as $key => $value) {
+            $stringSet .= "`$key` = :".$key . ', ';
+
+            $queryValue[':' . $key] = $value;
+        }
+
+        foreach ($where as $key => $value) {
+            $stringWhere .= "`$key` = :".$key . ', ';
+
+            $queryValue[':' . $key] = $value;
+        }
+
+        $stringSet = rtrim($stringSet, ', ');
+        $stringWhere = rtrim($stringWhere, ', ');
+
+        $sql = "UPDATE $table SET $stringSet  WHERE $stringWhere ";
+
+
+
+        $this->query($sql, $queryValue);
+
+
     }
+
 
 }
