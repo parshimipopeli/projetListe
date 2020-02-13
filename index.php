@@ -1,7 +1,9 @@
 <?php
+//echo realpath('index.php');
 require_once 'config/connect.php';
 //on va chercher la selection des users
 connexionBdd::get_Instance()->query("SELECT *  FROM users");
+
 //pour compter le nombre d 'entrée dans le resultat du select
 $count = connexionBdd::get_Instance()->rowCount();
 echo "<p class='text-center'>il y a $count users.</p>";
@@ -33,10 +35,10 @@ if (isset($_POST['delete'])) {
             <th>prenom</th>
             <th>ville</th>
             <th>rue</th>
-            <th>no de maison</th>
+            <th>n° de maison</th>
+            <th>n° de telephone</th>
             <th>email</th>
             <th>login</th>
-            <th>password</th>
         </tr>
         </thead>
         <tbody>
@@ -49,6 +51,7 @@ if (isset($_POST['delete'])) {
                             <td>' . $element['street'] . '</td>
                             <td>' . $element['city'] . '</td>
                             <td>' . $element['house_number'] . '</td>
+                             <td>' . $element['phone_number'] . '</td>
                             <td>' .$element['email'] . '</td>
                             <td>' . $element['login'] . '</td>
                             <td><a href="updateUsers.php?id=' . $element['id'] . '">update</a> </td>
