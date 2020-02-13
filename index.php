@@ -3,41 +3,16 @@ require_once 'config/connect.php';
 //on va chercher la selection des users
 connexionBdd::get_Instance()->query("SELECT *  FROM users");
 //pour compter le nombre d 'entrée dans le resultat du select
-    $count = connexionBdd::get_Instance()->rowCount();
-echo"<p class='text-center'>il y a $count users.</p>";
-
-
-
-
+$count = connexionBdd::get_Instance()->rowCount();
+echo "<p class='text-center'>il y a $count users.</p>";
 
 if (isset($_POST['delete'])) {
     $table = 'users';
     $id = $_POST['user'];
-var_dump($_POST);
-
     connexionBdd::get_Instance()->delete($table, $id);
     header('LOCATION:index.php');
-
-//    try
-//    {
-//        $dbh -> beginTransaction ();
-//        $req->execute();
-//        $dbh -> commit ();
-//    }
-//    catch ( Exception $e )
-//    {
-//        $dbh -> rollBack ();
-//    }
-
 }
-
-
-
-
-
 ?>
-
-
 <!doctype html>
 <html lang="fr">
 <head>
@@ -50,11 +25,7 @@ var_dump($_POST);
     <title>Document</title>
 </head>
 <body>
-
-
-
 <div class="container-fluid">
-
     <table class="table table-dark table-striped">
         <thead>
         <tr>
@@ -69,43 +40,27 @@ var_dump($_POST);
         </thead>
         <tbody>
         <?php
-$result = connexionBdd::get_Instance()->getResults();
+        $result = connexionBdd::get_Instance()->getResults();
         foreach ($result as $element) {
             echo '<tr role="row" class="odd">
-                            <td><a href="liste.php?id='.$element['id'].'">' . $element['first_name'] . '</a> </td>
+                            <td><a href="liste.php?id=' . $element['id'] . '">' . $element['first_name'] . '</a> </td>
                             <td>' . $element['lastName'] . '</td>
                             <td>' . $element['street'] . '</td>
                             <td>' . $element['city'] . '</td>
                             <td>' . $element['house_number'] . '</td>
                             <td>' . $element['login'] . '</td>
-                            <td><a href="updateUsers.php?id='.$element['id'].'">update</a> </td>
+                            <td><a href="updateUsers.php?id=' . $element['id'] . '">update</a> </td>
                             <td><form method="post" >
-                            <input type="hidden" name="user" value='.$element['id'].'>
+                            <input type="hidden" name="user" value=' . $element['id'] . '>
                             <button type="submit" name="delete" >delete</button>
-                            
                             </form></td>
-
-
-
-                
                         </tr>';
-
         }
         ?>
-
-<p><a href="adding_users.php">Ajouter un utilisateur</a></p>
-
+        <p><a href="adding_users.php">Ajouter un utilisateur</a></p>
         </tbody>
-</table>
+    </table>
 </div>
-
-
-
-
-
-
-
-
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 

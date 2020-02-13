@@ -8,13 +8,6 @@ $donnees = $req->fetch();
 foreach ($donnees as $key=>$elements){
     extract($donnees);
 }
-
-
-
-
-
-
-
 if(isset($_POST["submit"])){
     $req = $dbh->prepare('UPDATE users
 SET first_name = ?,lastName = ?, city = ?, street = ?, house_number = ?, phone_number = ?, login = ?, password = ? WHERE id=? ' );
@@ -33,8 +26,6 @@ SET first_name = ?,lastName = ?, city = ?, street = ?, house_number = ?, phone_n
         header('LOCATION:index.php');
     }
 }
-
-
 ?>
 <!doctype html>
 <html lang="fr">
@@ -106,9 +97,6 @@ SET first_name = ?,lastName = ?, city = ?, street = ?, house_number = ?, phone_n
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>
-
-
-
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
