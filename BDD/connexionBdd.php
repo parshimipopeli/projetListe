@@ -1,24 +1,51 @@
 <?php
 //singleton for connexion bdd
+namespace BDD;
+require_once 'config/define.php';
 
+/**
+ * Class connexionBdd
+ */
 class connexionBdd
 {
+    /**
+     * @var null
+     */
     private static $_instance = null;
+    /**
+     * @var \PDO
+     */
     public $_pdo;
-    private $_sth;
-    private $_rowcount;
-    private $_lastinsertid;
+    /**
+     * @var
+     */
+    public $_sth;
+    /**
+     * @var
+     */
+    public $_rowcount;
+    /**
+     * @var
+     */
+    public $_LastInsertId;
 
+    /**
+     * connexionBdd constructor.
+     *connection to the database
+     */
     private function __construct()
     {
         try {
-            $this->_pdo = new PDO("mysql:dbname=" . DB_NAME . ";host=" . LOCALHOST, ROOT);
-            $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
+            $this->_pdo = new \PDO("mysql:dbname=" . DB_NAME . ";host=" . LOCALHOST, ROOT);
+            $this->_pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        } catch (\PDOException $e) {
             die('Connection non faite : ' . $e->getMessage());
         }
     }
 
+    /**
+     * @return connexionBdd|null
+     */
     public static function get_Instance()
     {
         if (is_null(self::$_instance)) {
@@ -27,32 +54,53 @@ class connexionBdd
         return self::$_instance;
     }
 
-    //methode pour requette query
+
+    /**
+     * @param $req
+     * @param array $tab
+     * @return $this
+     * method for query
+     */
     public function query($req, $tab = [])
     {
         $this->_sth = $this->_pdo->prepare($req);
         $this->_sth->execute($tab);
         $this->_rowcount = $this->_sth->rowCount();
-        $this->_lastinsertid = $this->_pdo->lastInsertId();
-        return true;
+        $this->_LastInsertId = $this->_pdo->lastInsertId();
+        return $this;
     }
 
+    /**
+     * @return mixed
+     *method for counting the number of users
+     */
     public function rowCount()
     {
         return $this->_rowcount;
     }
 
+    /**
+     * @return mixed
+     */
     public function lastinsertid()
     {
         return $this->_lastinsertid;
     }
 
+    /**
+     * @return mixed
+     */
     public function getResults()
     {
         return $this->_sth->fetchAll();
     }
 
-//methode insert into
+
+    /**
+     * @param $table
+     * @param $tab
+     * method for insert into
+     **/
     public function insert($table, $tab)
     {
         $queryValue = [];
@@ -62,18 +110,38 @@ class connexionBdd
         $fields = implode(",", array_keys($tab));
         $values = ":" . implode(',:', array_keys($tab));
         $sql = "INSERT INTO $table ($fields) VALUES ($values)";
-        $this->query($sql, $queryValue);
+        return $this->query($sql, $queryValue);
     }
 
-//methode delete
+//
+
+    /**
+     * @param $table
+     * @param $id
+     * method for delete user
+     */
     public function delete($table, $id)
     {
         $tabId = [':id' => $id];
         $sql = "DELETE FROM $table WHERE id= :id";
         $this->query($sql, $tabId);
+
     }
 
-    //methode update
+    public function select($table,$id)
+    {
+        $tabId = [':id' => $id];
+        $sql = " SELECT FROM $table where id = :id";
+        $this->query($sql, $tabId);
+    }
+
+
+    /**
+     * @param $table
+     * @param $tab
+     * @param $where
+     * method for update user
+     */
     public function update($table, $tab, $where)
     {
         $stringWhere = '';
@@ -82,13 +150,13 @@ class connexionBdd
         $values = '';
         $queryValue = [];
         foreach ($tab as $key => $value) {
-            $stringSet .= "`$key` = :".$key . ', ';
+            $stringSet .= "`$key` = :" . $key . ', ';
 
             $queryValue[':' . $key] = $value;
         }
 
         foreach ($where as $key => $value) {
-            $stringWhere .= "`$key` = :".$key . ', ';
+            $stringWhere .= "`$key` = :" . $key . ', ';
 
             $queryValue[':' . $key] = $value;
         }
@@ -97,7 +165,6 @@ class connexionBdd
         $stringWhere = rtrim($stringWhere, ', ');
 
         $sql = "UPDATE $table SET $stringSet  WHERE $stringWhere ";
-
 
 
         $this->query($sql, $queryValue);

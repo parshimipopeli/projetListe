@@ -1,12 +1,27 @@
 <?php
-require_once 'config/connect.php';
-if (isset($_POST['submit'])) {
-    $table = 'users';
-    $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $tab = ['first_name' => $_POST["first_name"], 'lastName' => $_POST['lastName'], 'city' => $_POST['city'], 'street' => $_POST['street'], 'house_number' => $_POST['house_number'], 'phone_number' => $_POST['phone_number'],'email' => $_POST['email'], 'login' => $_POST['login'], 'password' => $pass];
-    connexionBdd::get_Instance()->insert($table, $tab);
-    header('LOCATION:index.php');
-}
+
+//require_once 'config/connect.php';
+
+// adding a users in bdd
+//if (isset($_POST['submit'])) {
+//    $table = 'users';
+//    $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
+//    $tab = ['first_name' => $_POST["first_name"], 'lastName' => $_POST['lastName'], 'city' => $_POST['city'], 'street' => $_POST['street'], 'house_number' => $_POST['house_number'], 'phone_number' => $_POST['phone_number'],'email' => $_POST['email'], 'login' => $_POST['login'], 'password' => $pass];
+//  connexionBdd::get_Instance()->insert($table, $tab);
+////header('LOCATION:index.php');
+//}
+
+
+//    faire un objet standart strClass
+//    $page=new stdClass();
+//    foreach ($_POST as $key =>$value){
+//        $page->$key=$value;
+//
+//    }
+//    var_dump($page);
+
+
+
 ?>
 <!doctype html>
 <html lang="fr">
@@ -19,7 +34,7 @@ if (isset($_POST['submit'])) {
     <title>Document</title>
 </head>
 <body>
-<form method="POST" class="form-horizontal" action="">
+<form method="POST" class="form-horizontal" id="addUser" action="traitementAddUser.php">
     <div class="form-group">
         <div class="col-sm-10">
             <input type="text" name="first_name" class="form-control" placeholder="Entrez votre nom">
@@ -67,10 +82,14 @@ if (isset($_POST['submit'])) {
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" name="submit" class="btn btn-default">Envoyer</button>
+            <button type="submit" name="submit" id="btnGo" class="btn btn-default">Envoyer</button>
         </div>
     </div>
 </form>
+
+
+
+
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
@@ -79,5 +98,6 @@ if (isset($_POST['submit'])) {
 
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

@@ -1,13 +1,25 @@
 <?php
-require_once 'config/connect.php';
+//require_once 'config/connect.php';
+require_once 'BDD/connexionBdd.php';
 require_once 'secure.php';
+use BDD\connexionBdd;
 
-$id=$_GET['id'];
-$sql = "SELECT * FROM users WHERE id=:id";
-$req = $dbh->prepare($sql);
-$req->bindParam(':id', $id);
-$req->execute();
-$user=$req->fetch();
+//$id=$_GET['id'];
+//$sql = "SELECT * FROM users WHERE id=:id";
+//$req = $dbh->prepare($sql);
+//$req->bindParam(':id', $id);
+//$req->execute();
+//$user=$req->fetch();
+$id = $_GET['id'];
+$where = [ 'id' => $id];
+ connexionBdd::get_Instance()->select('users', $where);
+
+
+
+
+$id = $_GET['id'];
+$where = [ 'id' => $id];
+connexionBdd::get_Instance()->update('users', $tab, $where);
 
 if (isset($_POST['submit'])) {
 
